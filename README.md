@@ -56,3 +56,12 @@ python -m scripts.run_agent
 ```bash
 python -m scripts.run_evaluator
 ```
+
+---
+
+## Approximate Runtime
+
+- Single agent run on one message: 15-20 seconds.
+- Single evaluator run on one message: 12-17 seconds.
+- Agent run on all 20 messages: 3-4 minutes.
+- Full evaluation run on all 20 messages: 8-10 minutes.
