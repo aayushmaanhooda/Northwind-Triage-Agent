@@ -1,0 +1,469 @@
+[
+  {
+    "id": "MSG-001",
+    "decision": {
+      "category": "BOOKING",
+      "priority": "P3",
+      "route_to": [
+        "Dispatch"
+      ],
+      "draft_reply": "Hi Sarah — got your message about the dripping tap in the ensuite. We'll have someone from dispatch call you back within the day to lock in a time. — The Northwind team",
+      "needs_human_review": false,
+      "reasoning": {
+        "rules_applied": [
+          "SOP Section 2: Customer wants to schedule a service (tap repair) → BOOKING",
+          "SOP Section 3: Standard enquiry, non-urgent → P3 (within 1 business day)",
+          "SOP Section 4: All BOOKING messages route to Dispatch",
+          "Catalogue: Tap washer replacement is a service we offer ($120 fixed)"
+        ],
+        "judgement_calls": [],
+        "summary": "Standard booking request for a dripping tap repair. Customer is in Mosman (within our 40km service area), no urgency indicated, service is in catalogue. Routes to Dispatch for scheduling, P3 priority."
+      }
+    }
+  },
+  {
+    "id": "MSG-002",
+    "decision": {
+      "category": "EMERGENCY",
+      "priority": "P1",
+      "route_to": [
+        "Dispatch"
+      ],
+      "draft_reply": "Hi Tom — water leak is a priority for us. Someone from dispatch will call you within the hour. In the meantime, if you can shut off the mains at the meter, that'll buy us time. — The Northwind team",
+      "needs_human_review": false,
+      "reasoning": {
+        "rules_applied": [
+          "SOP Section 2: 'water leak in progress' is explicitly listed as EMERGENCY",
+          "SOP Section 3: 'Active safety or property risk' = P1, 'EMERGENCY messages are always P1'",
+          "SOP Section 4: 'All BOOKING and EMERGENCY messages' route to Dispatch",
+          "SOP Section 3: P1 SLA is 'Within 1 hour, 24/7'",
+          "SOP Section 7: P1 EMERGENCY messages are actioned live even out-of-hours",
+          "Tone Guide: Emergency response example matches this scenario — acknowledge urgency, state callback window, offer immediate action customer can take"
+        ],
+        "judgement_calls": [],
+        "summary": "Active water leak through ceiling with ongoing flow despite taps being turned off. Clear P1 emergency requiring immediate dispatch response. Out-of-hours status doesn't change P1 treatment per SOP Section 7. Customer distressed but has taken initial action. Standard emergency protocol applies."
+      }
+    }
+  },
+  {
+    "id": "MSG-003",
+    "decision": {
+      "category": "OUT_OF_SCOPE",
+      "priority": "P3",
+      "route_to": [
+        "Customer Care"
+      ],
+      "draft_reply": "Hi Mei Lin — gutter cleaning isn't something we cover, sorry. Have a look at Allroof Services in your area; they handle that kind of work and we've had good feedback from customers we've referred. — The Northwind team",
+      "needs_human_review": false,
+      "reasoning": {
+        "rules_applied": [
+          "SOP Section 2: Checked OUT_OF_SCOPE first per decision procedure step 2",
+          "Catalogue 'Things we do not do': 'Roofing, gutter cleaning, or anything requiring full roof access' — gutter cleaning explicitly excluded",
+          "SOP Section 4: OUT_OF_SCOPE messages route to Customer Care",
+          "SOP Section 3: OUT_OF_SCOPE requests are standard enquiries, classified as P3",
+          "Tone Guide 'Out of scope' example: Used the template for gutter cleaning with Allroof Services referral"
+        ],
+        "judgement_calls": [],
+        "summary": "Customer requested gutter cleaning quote. Catalogue explicitly excludes gutter cleaning. Classified OUT_OF_SCOPE, routed to Customer Care for polite decline with referral to Allroof Services per tone guide example."
+      }
+    }
+  },
+  {
+    "id": "MSG-004",
+    "decision": {
+      "category": "COMPLAINT",
+      "priority": "P2",
+      "route_to": [
+        "Customer Care"
+      ],
+      "draft_reply": "Hi Daniel — that's a frustrating experience and not what we want for our customers. I've passed this to our Customer Care lead, who'll call you back today to work through it with you. — The Northwind team",
+      "needs_human_review": true,
+      "reasoning": {
+        "rules_applied": [
+          "SOP Section 2: Customer is unhappy with billing accuracy → COMPLAINT",
+          "SOP Section 3: Complaint, not involving active risk → default P3, but checking for escalation factors",
+          "SOP Section 3: No P1 or emergency criteria met, checking P2 triggers",
+          "SOP Section 4: All COMPLAINT messages route to Customer Care",
+          "SOP Section 6: Customer threatens online review → flag for human review",
+          "Catalogue: Power point installation is $190 fixed per outlet, with surcharge for upper floors noted"
+        ],
+        "judgement_calls": [
+          "Priority decision between P2 and P3: SOP Section 3 defines P2 as 'any complaint involving a charge over $1,000'. This invoice is $720, below that threshold, which would make it P3. However, the customer threatens a review and the disputed amount ($150) combined with the miscommunication about surcharges suggests escalation risk. The SOP doesn't explicitly define when review threats elevate priority. Going with P2 to ensure 4-hour response window given the review threat, though P3 would be defensible by strict rule application."
+        ],
+        "summary": "Customer complains about a $150 billing discrepancy on a power point installation job — quoted $570 but invoiced $720 due to an upper-floor surcharge that wasn't communicated upfront. Customer threatens a review if not resolved. Routing to Customer Care with P2 priority due to review threat, flagged for human review per SOP Section 6."
+      }
+    }
+  },
+  {
+    "id": "MSG-005",
+    "decision": {
+      "category": "QUOTE",
+      "priority": "P3",
+      "route_to": [
+        "Sales"
+      ],
+      "draft_reply": "Hi Priya — we can definitely help with an EV charger install in Chatswood. Single-phase installations start from $1,400, and our Sales team will call you within the day to confirm details and give you a firm quote and timeline. — The Northwind team",
+      "needs_human_review": false,
+      "reasoning": {
+        "rules_applied": [
+          "SOP Section 2: Customer asking 'could you send through a quote' → QUOTE category",
+          "SOP Section 3: Standard quote request → P3 (within 1 business day)",
+          "SOP Section 4: All QUOTE messages route to Sales",
+          "Catalogue: EV charger installation listed as 'from $1,400' for single-phase",
+          "Tone Guide: Reference what the customer actually said, 2-4 sentences, use 'from' for non-fixed prices"
+        ],
+        "judgement_calls": [],
+        "summary": "Customer requesting quote for single-phase EV charger installation at residential property in Chatswood (within service area). Service is offered in catalogue with 'from' pricing. Standard quote request routed to Sales, P3 priority, no human review needed."
+      }
+    }
+  },
+  {
+    "id": "MSG-006",
+    "decision": {
+      "category": "EMERGENCY",
+      "priority": "P1",
+      "route_to": [
+        "Dispatch"
+      ],
+      "draft_reply": "Hi Kevin — no hot water in winter with kids in the house is a priority for us. Someone from dispatch will call you within the hour to get a tradie out to you today. — The Northwind team",
+      "needs_human_review": false,
+      "reasoning": {
+        "rules_applied": [
+          "SOP Section 2: 'no hot water in winter' explicitly listed as EMERGENCY",
+          "SOP Section 3: EMERGENCY messages are always P1",
+          "SOP Section 3: P1 requires response within 1 hour, 24/7",
+          "SOP Section 4: EMERGENCY messages route to Dispatch",
+          "Catalogue: We service gas hot water systems — repair from $180/hr",
+          "Tone guide: Reference what customer said, be specific, 2-4 sentences"
+        ],
+        "judgement_calls": [],
+        "summary": "No hot water in winter with children present. Clear P1 emergency per SOP. Gas system is within our service capability. Hornsby is within 40km service area. Dispatch for same-day allocation."
+      }
+    }
+  },
+  {
+    "id": "MSG-007",
+    "decision": {
+      "category": "OUT_OF_SCOPE",
+      "priority": "P3",
+      "route_to": [
+        "Customer Care"
+      ],
+      "draft_reply": "Hi Rachel — we don't cover dishwasher repairs, sorry. We can install appliances but don't repair them. You'll need a dedicated appliance repair service for this one. — The Northwind team",
+      "needs_human_review": false,
+      "reasoning": {
+        "rules_applied": [
+          "Catalogue 'Things we do not do': Appliance repair (washing machines, dishwashers, ovens) — we install but do not repair",
+          "SOP Section 2: OUT_OF_SCOPE is used when the request is for something we don't offer",
+          "SOP Section 4: OUT_OF_SCOPE messages route to Customer Care, who send a polite decline",
+          "SOP Section 3: OUT_OF_SCOPE standard enquiry defaults to P3"
+        ],
+        "judgement_calls": [],
+        "summary": "Customer is requesting dishwasher repair. Catalogue explicitly excludes appliance repair (we install but don't repair). Classified as OUT_OF_SCOPE, routed to Customer Care for polite decline per SOP Section 4."
+      }
+    }
+  },
+  {
+    "id": "MSG-008",
+    "decision": {
+      "category": "QUOTE",
+      "priority": "P3",
+      "route_to": [
+        "Sales"
+      ],
+      "draft_reply": "Hi Alex — yes, we handle bathroom renovation plumbing. Our Sales team will need to see the plans and arrange a site visit before we can send through a written quote. Someone will be in touch within the next business day to get that sorted. — The Northwind team",
+      "needs_human_review": false,
+      "reasoning": {
+        "rules_applied": [
+          "SOP Section 2: customer asking 'can we get a written quote' → QUOTE category",
+          "Catalogue: bathroom renovation plumbing listed at 'from $4,500' with note 'Site visit + written quote always required'",
+          "SOP Section 3: standard quote request → P3, response within 1 business day",
+          "SOP Section 4: all QUOTE messages route to Sales",
+          "SOP Section 5: never quote a price unless catalogue lists a fixed price — this is 'from $4,500' so no price in draft"
+        ],
+        "judgement_calls": [],
+        "summary": "Customer requesting written quote for bathroom renovation plumbing in Cremorne. Work scope is substantial (vanity, shower, toilet relocation, floor waste). Catalogue shows this service exists ('bathroom renovation plumbing') and explicitly requires site visit + written quote. Routed to Sales as standard P3 quote request. No human review needed — within our service area, clear scope, no special circumstances."
+      }
+    }
+  },
+  {
+    "id": "MSG-009",
+    "decision": {
+      "category": "EMERGENCY",
+      "priority": "P2",
+      "route_to": [
+        "Dispatch"
+      ],
+      "draft_reply": "Hi Linda — heater not working in winter is a priority for us. Someone from dispatch will call you first thing tomorrow morning to arrange a visit. — The Northwind team",
+      "needs_human_review": false,
+      "reasoning": {
+        "rules_applied": [
+          "SOP Section 2: Loss of heating in winter is an EMERGENCY category",
+          "SOP Section 4: HVAC emergencies route to Dispatch, but note that after-hours HVAC issues become P2 because we do not have on-call HVAC tradies",
+          "SOP Section 3: Loss of essential function (heating) but no immediate damage = P2, within 4 business hours",
+          "SOP Section 7: Out of hours (19:05, after 18:00) — P2 messages are queued for next business morning; draft should acknowledge wait time"
+        ],
+        "judgement_calls": [],
+        "summary": "Customer has lost heating (ducted system) on a winter evening. This is an EMERGENCY by nature but becomes P2 because we have no on-call HVAC. Message received out-of-hours so will be actioned next business morning. Routes to Dispatch for next-day allocation."
+      }
+    }
+  },
+  {
+    "id": "MSG-010",
+    "decision": {
+      "category": "QUOTE",
+      "priority": "P3",
+      "route_to": [
+        "Sales"
+      ],
+      "draft_reply": "Hi Marcus — we can definitely service split systems, and the $220 fixed price per unit would apply. Because this is a strata block with 8 units, I've passed it to our Sales team who'll confirm the scope and send through a written quote. They'll be in touch within the day. — The Northwind team",
+      "needs_human_review": true,
+      "reasoning": {
+        "rules_applied": [
+          "SOP Section 2: Customer asking 'what would the pricing be' → QUOTE category",
+          "SOP Section 3: Standard quote request → P3 priority, within 1 business day SLA",
+          "SOP Section 4: All QUOTE messages route to Sales team",
+          "Catalogue: Split-system service / clean is $220 fixed per unit",
+          "Catalogue: 'Anything in commercial premises larger than 200m² — we are residential-only' constraint",
+          "SOP Section 6: 'borderline outside our catalogue' → flag for human review"
+        ],
+        "judgement_calls": [
+          "Catalogue says we don't service commercial premises >200m². This is a residential strata block where each unit is 60-90m² (well under threshold), but the aggregate building is 480-720m² and it's being contracted as a single job by a strata manager. The catalogue constraint is ambiguous on whether 'per premises' means per unit or the whole block. I'm treating each unit as a separate residential premises (which would qualify), but flagging for human review because the aggregate scope and single-contract nature makes this borderline."
+        ],
+        "summary": "Quote request for split-system servicing across 8 residential strata units. Each unit qualifies individually under our residential service limit, but the aggregate size and strata-managed nature makes this a borderline case. Routed to Sales with human review flag so they can assess whether to take it on as a bulk job."
+      }
+    }
+  },
+  {
+    "id": "MSG-011",
+    "decision": {
+      "category": "OUT_OF_SCOPE",
+      "priority": "P3",
+      "route_to": [
+        "Customer Care"
+      ],
+      "draft_reply": "Hi Jess — solar panel installation isn't something we offer, but we refer these jobs to our partner SunPath Energy who specialise in that work. Worth giving them a call for a quote. — The Northwind team",
+      "needs_human_review": false,
+      "reasoning": {
+        "rules_applied": [
+          "Catalogue Electrical section: 'Solar panel installation: Not offered — We refer these to our partner SunPath Energy'",
+          "Catalogue 'Things we do not do': explicitly lists solar panel installation and repair",
+          "SOP Section 2: OUT_OF_SCOPE category applies when 'request is for something we don't offer'",
+          "SOP Section 4: OUT_OF_SCOPE messages route to Customer Care",
+          "SOP Section 3: standard enquiry with no urgency = P3"
+        ],
+        "judgement_calls": [],
+        "summary": "Customer asking for solar panel quote. Catalogue explicitly excludes solar installation and names referral partner SunPath Energy. Classified OUT_OF_SCOPE, routed to Customer Care for polite decline with referral. No human review needed — straightforward exclusion with clear referral path."
+      }
+    }
+  },
+  {
+    "id": "MSG-012",
+    "decision": {
+      "category": "BOOKING",
+      "priority": "P3",
+      "route_to": [
+        "Dispatch"
+      ],
+      "draft_reply": "Hi George — no problem at all. Dispatch will give you a call today to lock in a new time for the afternoon of the 18th or anytime on the 19th. — The Northwind team",
+      "needs_human_review": false,
+      "reasoning": {
+        "rules_applied": [
+          "SOP Section 2: 'A request to reschedule an existing booking is a BOOKING, not a complaint, unless the customer explicitly expresses dissatisfaction.'",
+          "SOP Section 3: Standard enquiry or non-urgent booking → P3 (within 1 business day)",
+          "SOP Section 4: All BOOKING messages route to Dispatch",
+          "SOP Section 5: Acknowledge the customer's specific situation, state what happens next with SLA timing",
+          "Tone Guide: Plain language, 2-4 sentences, reference what customer said"
+        ],
+        "judgement_calls": [],
+        "summary": "Customer is rescheduling an existing hot water service replacement booking from morning of 18th to afternoon 18th or anytime 19th. Clean BOOKING case with no complaint expressed. Routes to Dispatch for rescheduling within standard P3 timeframe."
+      }
+    }
+  },
+  {
+    "id": "MSG-013",
+    "decision": {
+      "category": "OUT_OF_SCOPE",
+      "priority": "P3",
+      "route_to": [
+        "Customer Care"
+      ],
+      "draft_reply": "We received your webform message, but we're not able to make out what you need. If you'd like to get in touch about a plumbing, electrical, or HVAC job, please reply with a bit more detail and we'll be happy to help. — The Northwind team",
+      "needs_human_review": true,
+      "reasoning": {
+        "rules_applied": [
+          "SOP Section 2: OUT_OF_SCOPE used when message is not actionable (spam, wrong number, garbled, etc.)",
+          "SOP Section 4: OUT_OF_SCOPE routes to Customer Care",
+          "SOP Section 6: garbled messages require human review",
+          "SOP Section 3: non-urgent, non-emergency enquiry defaults to P3"
+        ],
+        "judgement_calls": [],
+        "summary": "Message appears to be test data or keyboard mashing—no coherent service request. Classified as OUT_OF_SCOPE per SOP guidance on garbled/non-actionable messages. Flagged for human review per SOP Section 6. Draft invites clarification in case this is a genuine customer with input error."
+      }
+    }
+  },
+  {
+    "id": "MSG-014",
+    "decision": {
+      "category": "EMERGENCY",
+      "priority": "P1",
+      "route_to": [
+        "Dispatch"
+      ],
+      "draft_reply": "Hi Hannah — burning smell and heat from a power point is a safety priority. Someone from dispatch will call you within the hour to arrange urgent attendance. Good call turning off that circuit. — The Northwind team",
+      "needs_human_review": false,
+      "reasoning": {
+        "rules_applied": [
+          "Catalogue Electrical: 'Sparking, tripping, smell of burning all P1'",
+          "SOP Section 2: active risk to property or safety classifies as EMERGENCY",
+          "SOP Section 3: EMERGENCY messages are always P1",
+          "SOP Section 4: emergency electrical goes to Dispatch",
+          "SOP Section 7: P1 EMERGENCY messages are actioned live even out-of-hours"
+        ],
+        "judgement_calls": [],
+        "summary": "Burning smell and warm power point is an electrical safety hazard. Catalogue explicitly lists 'smell of burning' as P1. Customer has already isolated the circuit, which is good, but this needs same-day emergency response. Lindfield is within our service area (within 40km of Sydney CBD). Out-of-hours but P1 so actioned immediately per SOP Section 7."
+      }
+    }
+  },
+  {
+    "id": "MSG-015",
+    "decision": {
+      "category": "BILLING",
+      "priority": "P3",
+      "route_to": [
+        "Accounts"
+      ],
+      "draft_reply": "Hi Ben — we'll check on that payment and confirm it's been reconciled against your invoice. Someone from Accounts will get back to you first thing Monday morning. — The Northwind team",
+      "needs_human_review": false,
+      "reasoning": {
+        "rules_applied": [
+          "SOP Section 2: Customer asking about invoice payment status → BILLING",
+          "SOP Section 3: Standard billing enquiry → P3 (within 1 business day)",
+          "SOP Section 4: All BILLING messages route to Accounts",
+          "SOP Section 7: Out-of-hours, P3 messages are queued for next business morning; draft should acknowledge wait time"
+        ],
+        "judgement_calls": [],
+        "summary": "Standard billing enquiry about payment reconciliation. No urgency, no complaint tone. Routes to Accounts for Monday morning follow-up since received Saturday out-of-hours."
+      }
+    }
+  },
+  {
+    "id": "MSG-016",
+    "decision": {
+      "category": "QUOTE",
+      "priority": "P3",
+      "route_to": [
+        "Sales"
+      ],
+      "draft_reply": "Hi Olivia — we can definitely help with both the switchboard upgrade and ducted aircon quote. Our sales team will be in touch first thing Monday to arrange a combined site visit. — The Northwind team",
+      "needs_human_review": false,
+      "reasoning": {
+        "rules_applied": [
+          "SOP Section 2: Customer asking for price estimates for work not yet agreed → QUOTE category",
+          "SOP Section 3: Standard quote request → P3 priority (within 1 business day)",
+          "SOP Section 4: All QUOTE messages route to Sales",
+          "Catalogue: Switchboard upgrade 'from $2,200' and ducted system installation 'from $9,500' both require site assessment",
+          "Catalogue: Bondi is within 40km of Sydney CBD → within service area",
+          "SOP Section 7: Out-of-hours P3 messages are queued for next business morning; draft should acknowledge wait time",
+          "Tone guide: 2-4 sentences, acknowledge specific situation, plain language, no price quotes for 'from' estimates"
+        ],
+        "judgement_calls": [],
+        "summary": "Customer requesting quotes for both switchboard upgrade and ducted aircon installation. Both services are in catalogue and require site assessment. Received Saturday out-of-hours, so queued for Sales follow-up Monday morning. No human review needed — straightforward dual-trade quote within our scope."
+      }
+    }
+  },
+  {
+    "id": "MSG-017",
+    "decision": {
+      "category": "COMPLAINT",
+      "priority": "P2",
+      "route_to": [
+        "Customer Care"
+      ],
+      "draft_reply": "Hi Robert — that's not the experience we want for our customers, and I'm sorry your wife was treated that way. Our Customer Care lead will call you back first thing Monday morning to work through this with you properly. — The Northwind team",
+      "needs_human_review": true,
+      "reasoning": {
+        "rules_applied": [
+          "SOP Section 2: customer is unhappy with tradesperson's conduct → COMPLAINT",
+          "SOP Section 4: all COMPLAINT messages route to Customer Care",
+          "SOP Section 6: customer mentions tradesperson conduct issue → flag for human review",
+          "SOP Section 7: out-of-hours message that is not P1 EMERGENCY is queued for next business morning → acknowledge wait time in draft"
+        ],
+        "judgement_calls": [
+          "Priority: SOP Section 3 defines P2 as 'any complaint involving a charge over $1,000'. This complaint involves $280 invoice. Default P3 timeline is 1 business day; P2 is 4 business hours. Customer is clearly unhappy but not threatening escalation, no refund requested yet, and the work itself was completed. However, conduct complaints can escalate quickly if not handled promptly. Chose P2 to ensure Monday morning response rather than potentially Tuesday, given this is a conduct issue that reflects on our reputation and the customer was referred by neighbours."
+        ],
+        "summary": "Complaint about tradesperson's conduct (muddy boots, short with customer's wife). Work itself was completed and paid ($280 blocked drain). Customer expects conversation about conduct. Flagged for human review per conduct complaint rule. Out-of-hours so queued for Monday morning response. Set P2 to prioritize over standard P3 complaints given reputational sensitivity."
+      }
+    }
+  },
+  {
+    "id": "MSG-018",
+    "decision": {
+      "category": "EMERGENCY",
+      "priority": "P1",
+      "route_to": [
+        "Dispatch"
+      ],
+      "draft_reply": "We've received your message about water coming from your hot water system. This is a priority for us — someone from dispatch will call you within the hour. — The Northwind team",
+      "needs_human_review": true,
+      "reasoning": {
+        "rules_applied": [
+          "SOP Section 2: water leak from hot water system is an EMERGENCY — 'water leak in progress' is explicitly listed",
+          "SOP Section 3: EMERGENCY messages are always P1",
+          "SOP Section 4: EMERGENCY routes to Dispatch",
+          "SOP Section 6: message in a language other than English → flag for human review",
+          "SOP Section 7: P1 EMERGENCY actioned live even out-of-hours"
+        ],
+        "judgement_calls": [],
+        "summary": "Customer reports active water leak from hot water system in Parramatta (within service area). Clear P1 emergency per SOP, routes to Dispatch for same-day action even though it's Saturday evening. Flagged for human review because message is in Spanish — dispatcher will need translation or bilingual support for the callback."
+      }
+    }
+  },
+  {
+    "id": "MSG-019",
+    "decision": {
+      "category": "BILLING",
+      "priority": "P3",
+      "route_to": [
+        "Accounts"
+      ],
+      "draft_reply": "Hi Catherine — I can see the refund for job NW-31288 should have been processed by now. Someone from our accounts team will look into this first thing tomorrow morning and get back to you to sort it out. — The Northwind team",
+      "needs_human_review": true,
+      "reasoning": {
+        "rules_applied": [
+          "SOP Section 2: Customer asking about a refund → BILLING category",
+          "SOP Section 4: All BILLING messages route to Accounts team",
+          "SOP Section 3: Standard billing enquiry → P3 (within 1 business day)",
+          "SOP Section 6: Refund over $500 ($720 in this case) → flag for human review",
+          "SOP Section 7: Out-of-hours P3 message → queued for next business morning, acknowledge wait time in draft"
+        ],
+        "judgement_calls": [],
+        "summary": "Customer enquiring about overdue $720 refund for cancelled job. Straightforward billing enquiry routed to Accounts, but flagged for human review because refund amount exceeds $500 threshold per SOP Section 6. Message received out-of-hours Sunday, so queued for Monday morning response."
+      }
+    }
+  },
+  {
+    "id": "MSG-020",
+    "decision": {
+      "category": "QUOTE",
+      "priority": "P3",
+      "route_to": [
+        "Sales"
+      ],
+      "draft_reply": "Hi Nathan — we can install a split system in your home office. Our sales team will be in touch first thing Monday to talk through the site and give you a proper quote; the exposed brick is good to know up front. — The Northwind team",
+      "needs_human_review": false,
+      "reasoning": {
+        "rules_applied": [
+          "SOP Section 2: customer asking 'what's the process' and 'can you give a rough quote' → QUOTE category",
+          "SOP Section 3: standard quote request → P3 (within 1 business day)",
+          "SOP Section 4: all QUOTE messages route to Sales",
+          "SOP Section 7: out-of-hours P3 message → queued for next business morning, draft should acknowledge wait time",
+          "Catalogue: split-system installation listed as 'from $1,600' → site-dependent pricing, no fixed quote available",
+          "Tone guide: 2–4 sentences, acknowledge specific situation (home office, exposed brick), state what happens next"
+        ],
+        "judgement_calls": [],
+        "summary": "Customer wants a quote for split-system install in a small home office in Glebe (within service area). Mentions exposed brick complication. Standard P3 quote request received out-of-hours Sunday, so Sales will follow up Monday morning. No flags triggered."
+      }
+    }
+  }
+]

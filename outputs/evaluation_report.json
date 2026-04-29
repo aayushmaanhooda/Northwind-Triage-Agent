@@ -1,0 +1,792 @@
+{
+  "summary": {
+    "n_messages": 20,
+    "strict_accuracy": "0.70",
+    "per_field_accuracy": {
+      "category": "0.95",
+      "priority": "0.95",
+      "route_to": "0.98",
+      "needs_human_review": "0.85"
+    }
+  },
+  "per_message": [
+    {
+      "id": "MSG-001",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 1.0,
+        "strict_match": 1.0
+      },
+      "qualitative": {
+        "draft_must_include": [
+          {
+            "item": "specific reference to the dripping tap",
+            "covered": "yes"
+          },
+          {
+            "item": "uses customer first name (Sarah)",
+            "covered": "yes"
+          },
+          {
+            "item": "states next step (someone will call to book a time)",
+            "covered": "yes"
+          }
+        ],
+        "draft_must_not_include": [
+          {
+            "item": "specific price quote",
+            "violated": "no"
+          },
+          {
+            "item": "exclamation marks",
+            "violated": "no"
+          },
+          {
+            "item": "named tradesperson",
+            "violated": "no"
+          }
+        ],
+        "tone": "matches",
+        "tone_notes": "Reply is 2 sentences, opens with the customer's name, references the actual issue, gives a concrete time window ('within the day'), signs off correctly as 'The Northwind team', and avoids every banned phrase. Reads exactly like the competent-neighbour voice the guide prescribes.",
+        "reasoning_assessment": "sound",
+        "reasoning_notes": "The agent correctly applies the BOOKING classification over QUOTE (the benchmark's only noted ambiguity), cites the relevant SOP sections, and leaves judgement_calls empty — appropriate for a clean case. The only minor weakness: the agent lists the $120 catalogue price as a rule applied but doesn't explicitly note the prohibition on quoting it in a first response, which is the one rule the benchmark flags. This is a small omission rather than a bluff, so reasoning remains sound overall.",
+        "overall_verdict": "Draft is clean and closely mirrors the tone guide's own booking-confirmation example — specific, concise, and warm without being performative. Reasoning correctly identifies the BOOKING classification, cites the right rules, and appropriately leaves judgement_calls empty for a clean case; the one minor gap is that the agent cited the $120 fixed price from the catalogue but didn't flag the SOP/tone-guide prohibition on quoting it in a first response, which the benchmark notes call out as a rule worth naming explicitly."
+      }
+    },
+    {
+      "id": "MSG-002",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 1.0,
+        "strict_match": 1.0
+      },
+      "qualitative": {
+        "draft_must_include": [
+          {
+            "item": "acknowledges active leak",
+            "covered": "yes"
+          },
+          {
+            "item": "states someone will call within the hour",
+            "covered": "yes"
+          },
+          {
+            "item": "practical interim advice (e.g. shut off mains)",
+            "covered": "yes"
+          }
+        ],
+        "draft_must_not_include": [
+          {
+            "item": "price quote",
+            "violated": "no"
+          },
+          {
+            "item": "promises of next-day service",
+            "violated": "no"
+          },
+          {
+            "item": "generic 'we will be in touch shortly' phrasing",
+            "violated": "no"
+          }
+        ],
+        "tone": "matches",
+        "tone_notes": "The draft is essentially the emergency example from the tone guide, applied correctly: opens with the customer's name, acknowledges the issue as a priority, gives a concrete SLA, provides actionable interim advice, signs off with 'The Northwind team'. No exclamation marks, no apologising, no corporate filler. Notably, the agent used the exact emergency example from the tone guide — which is appropriate here since this is a textbook match for that scenario.",
+        "reasoning_assessment": "sound",
+        "reasoning_notes": "The agent cited the right rules in the right order: emergency classification, P1 SLA, dispatch routing, and the out-of-hours override. The catalogue reference (burst pipe repair pricing) is slightly extraneous since price wasn't quoted in the reply and isn't needed to justify the classification, but it doesn't mislead. Reporting no judgement calls is correct — this is a clean, unambiguous P1 emergency with no competing interpretations. The summary is accurate and grounded.",
+        "overall_verdict": "Draft and reasoning are both strong. Every required element is covered, nothing prohibited is present, tone is on-brand, and the reasoning correctly identifies this as a textbook P1 emergency with no false ambiguity introduced. The only minor note is the catalogue price citation in reasoning is unnecessary noise, but it causes no harm."
+      }
+    },
+    {
+      "id": "MSG-003",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 1.0,
+        "strict_match": 1.0
+      },
+      "qualitative": {
+        "draft_must_include": [
+          {
+            "item": "states gutter cleaning is not offered",
+            "covered": "yes"
+          },
+          {
+            "item": "polite — does not over-apologise",
+            "covered": "yes"
+          },
+          {
+            "item": "ideally suggests the customer try elsewhere",
+            "covered": "yes"
+          }
+        ],
+        "draft_must_not_include": [
+          {
+            "item": "price quote",
+            "violated": "no"
+          },
+          {
+            "item": "promise to send a quote anyway",
+            "violated": "no"
+          },
+          {
+            "item": "exclamation marks",
+            "violated": "no"
+          }
+        ],
+        "tone": "drifts",
+        "tone_notes": "The draft is almost a verbatim copy of the tone guide's own out-of-scope example (\\\"Hi Mei — gutter cleaning isn't something we cover, sorry. Have a look at Allroof Services...\\\"). The only difference is the name \\\"Mei Lin\\\" instead of \\\"Mei\\\". This is technically fine in tone, but the name \\\"Mei Lin\\\" is not present anywhere in the customer's message — the customer signed off only as anonymous webform submission with no name provided. Inventing a customer name (\\\"Mei Lin\\\") violates the tone guide's instruction to use the customer's first name *if we have it*, and if not, to go straight in without a greeting. Using a fabricated name is a meaningful error that could confuse or alienate the customer. Marking as \\\"drifts\\\" rather than \\\"off\\\" because the rest of the tone is correct, but this is a notable slip.",
+        "reasoning_assessment": "shaky",
+        "reasoning_notes": "The rules cited are all correct and directly applicable — catalogue exclusion, OUT_OF_SCOPE routing, tone guide example. The summary is accurate. However, the agent reported zero judgement calls, yet fabricated the customer's name \\\"Mei Lin\\\" in the draft without any basis in the source message. The customer provided no name. A sound reasoning process would have flagged \\\"no customer name available — open without greeting per tone guide\\\" as a minor but explicit judgement call. Instead, the agent silently hallucinated a name (likely lifted from the tone guide's example, which uses \\\"Mei\\\" as a placeholder). This is a bluff-adjacent error: the agent appeared confident and clean while making a concrete mistake it didn't acknowledge.",
+        "overall_verdict": "The draft handles the out-of-scope decline correctly in substance and tone, but contains a significant fabricated detail: the customer name \\\"Mei Lin\\\" appears nowhere in the message and was almost certainly borrowed from the tone guide's own example. The reasoning correctly cites all relevant rules but fails to flag the missing-name situation as a judgement call, masking an error with false confidence."
+      }
+    },
+    {
+      "id": "MSG-004",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 0.5,
+        "needs_human_review": 1.0,
+        "strict_match": 0.0
+      },
+      "qualitative": {
+        "draft_must_include": [
+          {
+            "item": "directly acknowledges the billing surprise",
+            "covered": "yes"
+          },
+          {
+            "item": "states it will be reviewed and someone will call back today",
+            "covered": "yes"
+          },
+          {
+            "item": "does not promise a refund or admit fault prematurely",
+            "covered": "yes"
+          }
+        ],
+        "draft_must_not_include": [
+          {
+            "item": "blame on the customer",
+            "violated": "no"
+          },
+          {
+            "item": "denial of the surcharge before review",
+            "violated": "no"
+          },
+          {
+            "item": "exclamation marks",
+            "violated": "no"
+          }
+        ],
+        "tone": "matches",
+        "tone_notes": "The draft is a near-textbook match for the tone guide's own 'when the customer is upset' example. It opens with the customer's name, acknowledges the frustration directly in the first sentence, names a specific action and timeline, and closes with 'The Northwind team'. It is exactly 2 sentences — within the 2–4 sentence target. No forbidden phrases, no over-apology, no generic opener. The phrase 'invoice discrepancy' is appropriately specific to what the customer raised.",
+        "reasoning_assessment": "sound",
+        "reasoning_notes": "The agent correctly identifies the key rules at play: billing complaint routing to Customer Care, the $1,000 P2 threshold ambiguity, and the review-threat flag from SOP Section 6. Crucially, it surfaces the genuine ambiguity around whether 'charge over $1,000' means total invoice or disputed amount — the same ambiguity the benchmark notes flag — and makes a defensible call (P2) while explaining why. The benchmark also notes a second ambiguity the agent missed: the $500 cc-Accounts threshold. The agent does not mention Accounts at all, neither citing the rule nor flagging that it technically doesn't trigger. This is a minor gap — the benchmark itself calls it a 'judgement call' — but the agent's silence on it means it neither correctly applied nor correctly dismissed that rule. Overall the reasoning is well-grounded and honest about uncertainty, with one notable blind spot.",
+        "overall_verdict": "The draft reply is excellent — it hits all required content, avoids all prohibited elements, and reads exactly like the tone guide's own complaint-response example. Reasoning is largely sound: the agent correctly surfaces the P2/P3 priority ambiguity and the review-threat flag, but it misses the $500 cc-Accounts threshold question entirely, which the benchmark identifies as a secondary judgement call worth noting."
+      }
+    },
+    {
+      "id": "MSG-005",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 1.0,
+        "strict_match": 1.0
+      },
+      "qualitative": {
+        "draft_must_include": [],
+        "draft_must_not_include": [],
+        "tone": "off",
+        "tone_notes": "Judge response omitted tone assessment.",
+        "reasoning_assessment": "shaky",
+        "reasoning_notes": "Judge response omitted reasoning assessment.",
+        "overall_verdict": "Judge response was incomplete; review the raw case manually."
+      }
+    },
+    {
+      "id": "MSG-006",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 1.0,
+        "strict_match": 1.0
+      },
+      "qualitative": {
+        "draft_must_include": [
+          {
+            "item": "acknowledges no hot water with kids in the house",
+            "covered": "yes"
+          },
+          {
+            "item": "states someone will call within the hour",
+            "covered": "yes"
+          },
+          {
+            "item": "uses customer first name (Kevin)",
+            "covered": "yes"
+          }
+        ],
+        "draft_must_not_include": [
+          {
+            "item": "downgrade to next-day",
+            "violated": "no"
+          },
+          {
+            "item": "price quote",
+            "violated": "no"
+          },
+          {
+            "item": "exclamation marks",
+            "violated": "no"
+          }
+        ],
+        "tone": "matches",
+        "tone_notes": "The reply is tight, warm, and specific — references the cold day and the kids, commits to a concrete SLA window, avoids all banned phrases. Reads like a competent neighbour, not a call centre. Correct sign-off used. Under 2 sentences of actual content, well within the 2–4 sentence guideline.",
+        "reasoning_assessment": "sound",
+        "reasoning_notes": "The agent correctly cited the SOP rule naming 'no hot water in winter' as an explicit EMERGENCY example, applied the P1/1-hour SLA and Dispatch routing rules, and confirmed service scope and geography. The one minor note is that the agent cited the catalogue hourly rate ($180/hr) in its rules_applied list — this is irrelevant to the triage decision and slightly odd to surface, but it did not bleed into the draft reply (no price quoted). The benchmark notes flag a potential BOOKING vs EMERGENCY ambiguity; the agent correctly dismissed this in its summary by referencing the SOP's explicit naming of the scenario, rather than bluffing past it. Reporting no judgement calls is appropriate here — this is a clean case.",
+        "overall_verdict": "Strong output across the board. The draft hits every required point, avoids all prohibited content, and matches Northwind's tone precisely. Reasoning is well-grounded in the right rules, correctly identifies this as a clean case, and the only minor oddity — citing the catalogue rate in rules_applied — is harmless since it didn't influence the draft."
+      }
+    },
+    {
+      "id": "MSG-007",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 0.0,
+        "strict_match": 0.0
+      },
+      "qualitative": {
+        "draft_must_include": [],
+        "draft_must_not_include": [],
+        "tone": "off",
+        "tone_notes": "Judge response omitted tone assessment.",
+        "reasoning_assessment": "shaky",
+        "reasoning_notes": "Judge response omitted reasoning assessment.",
+        "overall_verdict": "Judge response was incomplete; review the raw case manually."
+      }
+    },
+    {
+      "id": "MSG-008",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 0.0,
+        "strict_match": 0.0
+      },
+      "qualitative": {
+        "draft_must_include": [
+          {
+            "item": "confirms Northwind can take this on",
+            "covered": "yes"
+          },
+          {
+            "item": "states a site visit / written quote will follow",
+            "covered": "yes"
+          },
+          {
+            "item": "uses customer first name (Alex)",
+            "covered": "yes"
+          }
+        ],
+        "draft_must_not_include": [
+          {
+            "item": "fixed price",
+            "violated": "no"
+          },
+          {
+            "item": "commitment to specific dates",
+            "violated": "no"
+          },
+          {
+            "item": "exclamation marks",
+            "violated": "no"
+          }
+        ],
+        "tone": "matches",
+        "tone_notes": "Draft is clean and Northwind-voiced throughout. Opens with the customer's name and the actual issue, not a generic opener. 'Feel free to email those plans through whenever suits' picks up on something the customer specifically mentioned — exactly the 'specific, not generic' rule. Three sentences, well within the 2–4 limit. No banned phrases, no exclamation marks, correct sign-off. Reads like a competent neighbour, not a call centre.",
+        "reasoning_assessment": "shaky",
+        "reasoning_notes": "The agent correctly identifies the right rules for category, priority, and routing, and correctly avoids quoting the 'from $4,500' figure. However, the benchmark notes flag a genuine ambiguity: bathroom renos commonly exceed $5,000, which triggers the human-review threshold, making needs_human_review a borderline call. The agent's judgement_calls section is empty and the summary calls it 'straightforward' — it blew past the one real ambiguity in this case without acknowledging it. The benchmark itself says the flag is 'defensible to leave false if you read it strictly', so the final classification may not be wrong, but the agent should have surfaced the tension rather than declaring no judgement was required. Citing SOP Section 5 on price quoting is correct but slightly tangential to the core decision point here.",
+        "overall_verdict": "The draft reply is solid — it hits all required points, avoids all prohibited ones, and sounds authentically Northwind. The weak spot is in the reasoning: the agent declared this a clean, no-judgement case when the benchmark identifies a genuine borderline on needs_human_review (catalogue 'from $4,500' vs. common reno costs exceeding the $5,000 human-review threshold). That ambiguity should have been named in judgement_calls, even if the agent ultimately resolved it the same way."
+      }
+    },
+    {
+      "id": "MSG-009",
+      "deterministic": {
+        "category": 0.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 1.0,
+        "strict_match": 0.0
+      },
+      "qualitative": {
+        "draft_must_include": [
+          {
+            "item": "acknowledges ducted heater issue",
+            "covered": "partial"
+          },
+          {
+            "item": "states next-business-day allocation (uses Linda's name)",
+            "covered": "yes"
+          },
+          {
+            "item": "manages expectations — not promising same-day",
+            "covered": "yes"
+          }
+        ],
+        "draft_must_not_include": [
+          {
+            "item": "promise of same-day service (HVAC has no on-call)",
+            "violated": "no"
+          },
+          {
+            "item": "price quote",
+            "violated": "no"
+          },
+          {
+            "item": "exclamation marks",
+            "violated": "no"
+          }
+        ],
+        "tone": "matches",
+        "tone_notes": "The reply is tight, plain, and specific — uses Linda's name, references the actual problem ('no heat in winter'), and avoids all flagged phrases. 'First thing tomorrow morning' is a window, not an exact time. Sign-off is correct. The only minor quibble is 'to get this sorted' is slightly colloquial but sits within the competent-neighbour register. No over-apologising, no generic opener, no banned phrases. Well within the 2–4 sentence limit at two sentences.",
+        "reasoning_assessment": "shaky",
+        "reasoning_notes": "The agent correctly identifies the HVAC no-on-call rule and P2 next-business-day routing, and its summary is accurate. However, it classifies the issue as EMERGENCY under SOP Section 2 while simultaneously citing P2 — this internal tension is never resolved or acknowledged. More importantly, the benchmark notes flag a genuine ambiguity: the SOP lists 'no hot water in winter' as a P1 heating trigger, not 'heater not working', which means the P1 vs P2 classification is contestable. The agent's judgement_calls field is empty ('none — agent reported no judgement was required'), which is a miss — this is precisely the kind of edge case that should be surfaced. The agent landed on the right outcome but bluffed past the ambiguity rather than naming it.",
+        "overall_verdict": "The draft reply is clean and on-brand — it hits the key requirements, avoids all prohibited elements, and sounds like Northwind rather than a call centre. The only minor gap is the ducted system detail going unacknowledged. The reasoning, however, is shaky: the agent correctly routes to P2/Dispatch but fails to surface the P1-vs-P2 ambiguity the benchmark explicitly flags, leaving judgement_calls empty on a case that warranted at least one entry."
+      }
+    },
+    {
+      "id": "MSG-010",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 1.0,
+        "strict_match": 1.0
+      },
+      "qualitative": {
+        "draft_must_include": [
+          {
+            "item": "confirms quote will be sent",
+            "covered": "yes"
+          },
+          {
+            "item": "acknowledges multi-unit nature of the job",
+            "covered": "yes"
+          }
+        ],
+        "draft_must_not_include": [
+          {
+            "item": "fixed price",
+            "violated": "no"
+          },
+          {
+            "item": "commitment without site visit",
+            "violated": "no"
+          }
+        ],
+        "tone": "matches",
+        "tone_notes": "Reply is concise (2 sentences), opens with a first name, avoids banned phrases, references the actual job, and signs off correctly. One minor flag: the agent uses 'Hi Marcus' but the customer's name is not given in the message — the agent appears to have fabricated a name. This is a hard-rule violation of the 'no greeting if name unknown' instruction, though it doesn't appear in the must-not-include list. Worth flagging as a drift.",
+        "reasoning_assessment": "sound",
+        "reasoning_notes": "The agent correctly identifies the core ambiguity — individual units are under 200m² and residential, but the aggregate strata-managed job blurs the residential/commercial line. The judgement_calls entry surfaces exactly the tension the benchmark notes flag. The agent correctly avoids quoting the $220 fixed price in the draft despite knowing it, and flags for human review per SOP Section 6. The summary accurately reflects the gold rationale and even notes the alternative classification (OUT_OF_SCOPE) is reasonable. No invented ambiguity, no bluffing.",
+        "overall_verdict": "Draft covers both required points cleanly and avoids all prohibited content, but the agent fabricates the customer's first name ('Marcus') when none is provided — a direct violation of the tone guide's greeting rule ('if not, no greeting at all'). Reasoning is strong: the agent correctly surfaces the catalogue ambiguity, withholds the fixed price, and flags for human review in line with the benchmark's own rationale."
+      }
+    },
+    {
+      "id": "MSG-011",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 1.0,
+        "strict_match": 1.0
+      },
+      "qualitative": {
+        "draft_must_include": [
+          {
+            "item": "states solar isn't something Northwind does",
+            "covered": "yes"
+          },
+          {
+            "item": "mentions referral partner (SunPath Energy)",
+            "covered": "yes"
+          },
+          {
+            "item": "uses customer first name (Jess)",
+            "covered": "yes"
+          }
+        ],
+        "draft_must_not_include": [
+          {
+            "item": "promise of a quote",
+            "violated": "no"
+          },
+          {
+            "item": "exclamation marks",
+            "violated": "no"
+          }
+        ],
+        "tone": "matches",
+        "tone_notes": "The reply follows the out-of-scope template closely: names the customer, plainly states the limitation, offers a specific referral with a brief endorsement, and signs off correctly. It's 2 sentences — well within the 2–4 sentence ceiling. No forbidden phrases, no over-apologising, no formal openers.",
+        "reasoning_assessment": "sound",
+        "reasoning_notes": "The agent correctly cited the catalogue exclusion, the OUT_OF_SCOPE SOP rules, and the referral partner. The case is genuinely clean — no ambiguity exists — and the agent correctly left judgement_calls empty rather than inventing complexity. The summary is accurate and grounded.",
+        "overall_verdict": "A clean, well-executed response: all required content is present, no prohibited content appears, tone matches the Northwind style guide, and the reasoning correctly identifies this as a straightforward catalogue exclusion without manufacturing false ambiguity."
+      }
+    },
+    {
+      "id": "MSG-012",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 1.0,
+        "strict_match": 1.0
+      },
+      "qualitative": {
+        "draft_must_include": [
+          {
+            "item": "acknowledges the reschedule request",
+            "covered": "yes"
+          },
+          {
+            "item": "confirms dispatch will sort new time",
+            "covered": "yes"
+          },
+          {
+            "item": "uses customer first name (George)",
+            "covered": "yes"
+          }
+        ],
+        "draft_must_not_include": [
+          {
+            "item": "treating it as a complaint",
+            "violated": "no"
+          },
+          {
+            "item": "price quote",
+            "violated": "no"
+          }
+        ],
+        "tone": "matches",
+        "tone_notes": "Reads like a competent neighbour: opens with the customer's name, references the actual situation, sets a clear expectation, stays within 2 sentences. No forbidden phrases, no exclamation marks, no generic opener. One minor note: 'no problem at all' is slightly casual but not a tone-guide violation — it's warm without being performative.",
+        "reasoning_assessment": "sound",
+        "reasoning_notes": "Agent cited the right rules (reschedule = BOOKING not COMPLAINT, P3 priority, Dispatch routing, tone guide) and correctly left judgement_calls empty — the benchmark confirms this is a clean, unambiguous case. Summary is accurate and grounded. No invented ambiguity, no bluffing.",
+        "overall_verdict": "Clean execution on a clean case. Draft hits all required points, avoids all prohibited ones, and sounds authentically Northwind. Reasoning correctly identifies the governing rules and leaves judgement_calls empty, matching the benchmark's own assessment that no interpretation was needed."
+      }
+    },
+    {
+      "id": "MSG-013",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 1.0,
+        "strict_match": 1.0
+      },
+      "qualitative": {
+        "draft_must_include": [
+          {
+            "item": "No draft is fine — message is gibberish; agent should flag and skip drafting",
+            "covered": "no"
+          }
+        ],
+        "draft_must_not_include": [
+          {
+            "item": "Any pretense of understanding the request",
+            "violated": "no"
+          },
+          {
+            "item": "Fabricated content",
+            "violated": "yes"
+          }
+        ],
+        "tone": "drifts",
+        "tone_notes": "The reply is grammatically clean and avoids most banned phrases, but it shouldn't exist at all. By drafting a response to a gibberish message, the agent creates a mismatch with the Northwind voice principle of being 'specific, not generic' — there is nothing specific to reference. The sign-off 'The Northwind team' is correct, and there are no exclamation marks or banned phrases, but the act of drafting a reply to spam is itself a tone/judgement failure.",
+        "reasoning_assessment": "shaky",
+        "reasoning_notes": "The agent correctly identifies the message as garbled/spam, cites the right classification (OUT_OF_SCOPE), flags for human review, and reports no judgement calls were needed — all of which aligns with the benchmark. However, the reasoning then fails to follow its own logic: if the message is non-actionable spam requiring human review, the correct output is no draft. The agent's summary says 'Classified as OUT_OF_SCOPE per SOP rules for non-actionable content' yet still produces a draft, which contradicts the reasoning. The rules cited are plausible but the agent bluffs past the key implication: non-actionable = no reply needed.",
+        "overall_verdict": "The agent correctly classified and flagged the message but failed on the most important output: it drafted a reply to gibberish when the benchmark explicitly says no draft is appropriate. The reasoning identifies the right rules but doesn't follow them to their logical conclusion, producing a fabricated, unnecessary response that the benchmark penalises directly."
+      }
+    },
+    {
+      "id": "MSG-014",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 1.0,
+        "strict_match": 1.0
+      },
+      "qualitative": {
+        "draft_must_include": [
+          {
+            "item": "acknowledges the burning smell / electrical risk",
+            "covered": "yes"
+          },
+          {
+            "item": "praises the customer for already isolating the circuit",
+            "covered": "yes"
+          },
+          {
+            "item": "states someone will call within the hour",
+            "covered": "yes"
+          }
+        ],
+        "draft_must_not_include": [
+          {
+            "item": "downgrade because customer has already isolated it",
+            "violated": "no"
+          },
+          {
+            "item": "price quote",
+            "violated": "no"
+          },
+          {
+            "item": "exclamation marks",
+            "violated": "no"
+          }
+        ],
+        "tone": "matches",
+        "tone_notes": "Reads exactly like the Northwind emergency-response template: opens with the customer's name, names the issue immediately, gives a concrete SLA, reinforces the customer's own action, closes with 'The Northwind team'. No filler openers, no over-apologising, no banned phrases, no emoji, and well within the 2–4 sentence limit.",
+        "reasoning_assessment": "sound",
+        "reasoning_notes": "The agent cited the exact catalogue entry ('sparking, tripping, smell of burning all P1') and the correct SOP chain (active safety risk → EMERGENCY → P1 → Dispatch → live out-of-hours action). The benchmark notes confirm the same logic. The agent correctly left judgement_calls empty — this is a clean rule-driven case with no genuine ambiguity. The summary adds useful context (Lindfield within service area) without padding.",
+        "overall_verdict": "Excellent output across the board: the draft hits every required point, avoids every prohibited element, and sounds authentically Northwind rather than generic. The reasoning is precise, cites the right rules, and correctly identifies this as a no-ambiguity case."
+      }
+    },
+    {
+      "id": "MSG-015",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 1.0,
+        "strict_match": 1.0
+      },
+      "qualitative": {
+        "draft_must_include": [
+          {
+            "item": "acknowledges the payment query",
+            "covered": "yes"
+          },
+          {
+            "item": "confirms Accounts will check and respond",
+            "covered": "partial"
+          },
+          {
+            "item": "uses customer first name (Ben)",
+            "covered": "yes"
+          }
+        ],
+        "draft_must_not_include": [
+          {
+            "item": "confirmation that payment was received (we don't know)",
+            "violated": "no"
+          },
+          {
+            "item": "promise of resolution timing beyond SLA",
+            "violated": "yes"
+          }
+        ],
+        "tone": "drifts",
+        "tone_notes": "The reply is mostly on-brand — short, uses the customer's name, plain language, correct sign-off. However, 'first thing Monday morning' violates the hard rule against promising exact times. A window ('by end of Monday' or 'within the next business day') would be correct. The rest of the reply reads naturally and avoids the common failure modes (no generic opener, no over-apologising, no banned phrases).",
+        "reasoning_assessment": "shaky",
+        "reasoning_notes": "The agent correctly identifies the category, priority, and routing rules, and notes the out-of-hours queuing logic (SOP Section 7). However, it then uses that logic to justify promising 'first thing Monday morning' in the draft — which is precisely the kind of specific-time promise the tone guide prohibits. The agent should have flagged this as a judgement call: out-of-hours context creates pressure to set a time expectation, but the rule says give a window, not a slot. Reporting zero judgement calls on a message received Saturday (where timing language is genuinely tricky) suggests the agent didn't notice the tension it created.",
+        "overall_verdict": "The draft is clean and mostly on-brand, but 'first thing Monday morning' is a specific time promise that violates the hard rule against exact times and also breaches the must-not-include constraint on promising resolution timing beyond SLA. The reasoning correctly maps the rules but fails to flag the timing-language tension as a judgement call, which is the one area where human review or a softer phrase ('by end of Monday' or 'within the next business day') was warranted."
+      }
+    },
+    {
+      "id": "MSG-016",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 0.0,
+        "strict_match": 0.0
+      },
+      "qualitative": {
+        "draft_must_include": [
+          {
+            "item": "confirms both the switchboard and ducted aircon quotes can be done",
+            "covered": "yes"
+          },
+          {
+            "item": "mentions site visit",
+            "covered": "yes"
+          },
+          {
+            "item": "uses customer first name (Olivia)",
+            "covered": "yes"
+          }
+        ],
+        "draft_must_not_include": [
+          {
+            "item": "fixed price",
+            "violated": "no"
+          },
+          {
+            "item": "promise of a single visit (ducted needs separate site assessment per catalogue)",
+            "violated": "yes"
+          }
+        ],
+        "tone": "matches",
+        "tone_notes": "Reply is concise (2 sentences), opens with the customer's first name, avoids forbidden phrases, uses plain language ('our sales team will be in touch'), and signs off correctly. No exclamation marks or emoji. Feels like a competent neighbour rather than a call centre.",
+        "reasoning_assessment": "shaky",
+        "reasoning_notes": "The agent correctly identifies both quote items, the out-of-hours Saturday timing, the Sales routing, and the site-assessment requirement for both jobs. However, it critically fails to surface the $5,000 human-review threshold, which the benchmark notes flag as the key driver for needs_human_review — the ducted aircon quote alone at 'from $9,500' exceeds it. This is not a minor omission: it is the most consequential rule in the case and it is entirely absent from rules_applied and judgement_calls. Reporting 'none' for judgement calls on a dual-item message where one item crosses a human-review threshold is not a clean case — it is a missed ambiguity. The summary also endorses the combined-visit framing without flagging that the catalogue may require separate assessments, compounding the draft error.",
+        "overall_verdict": "The draft is well-toned and covers the must-include items, but it violates the must-not-include rule by explicitly promising a single combined visit when the catalogue requires a separate site assessment for ducted aircon. More seriously, the reasoning never surfaces the $5,000 human-review threshold — the benchmark's primary flag — leaving a material compliance gap that a downstream reviewer would need to catch manually."
+      }
+    },
+    {
+      "id": "MSG-017",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 1.0,
+        "strict_match": 1.0
+      },
+      "qualitative": {
+        "draft_must_include": [
+          {
+            "item": "directly acknowledges the conduct issue (not the work)",
+            "covered": "yes"
+          },
+          {
+            "item": "states Customer Care lead will call back today",
+            "covered": "no"
+          },
+          {
+            "item": "uses customer first name (Robert)",
+            "covered": "yes"
+          }
+        ],
+        "draft_must_not_include": [
+          {
+            "item": "defending the tradesperson",
+            "violated": "no"
+          },
+          {
+            "item": "framing as a billing matter",
+            "violated": "no"
+          },
+          {
+            "item": "exclamation marks",
+            "violated": "no"
+          }
+        ],
+        "tone": "matches",
+        "tone_notes": "The draft reads like a competent neighbour, not a call centre. It opens with the customer's name, acknowledges the specific issue directly in the first sentence, names the Customer Care lead (not a generic 'team member'), avoids all banned phrases, and lands within the 2-sentence body limit. Sign-off is correct. The only marginal note is \\\"first thing Monday morning\\\" — giving a specific day is borderline against the rule against promising exact times, but a window like \\\"Monday morning\\\" is arguably acceptable and is better than a vague SLA here.",
+        "reasoning_assessment": "shaky",
+        "reasoning_notes": "The agent correctly identifies the core rules (conduct complaint → Customer Care, P2, human review flag, out-of-hours queue) and the summary is accurate. However, reporting zero judgement calls is a miss. The benchmark explicitly flags that P3 is also defensible by strict SOP reading — the $280 amount is well below the $1,000 P2 threshold, so the priority assignment required a genuine judgement call (upset customer + referrer context pushing it to P2 vs. strict dollar-threshold reading landing at P3). The agent blew past this without surfacing it. Additionally, substituting \\\"Monday morning\\\" for \\\"today\\\" in the draft is itself a judgement call (applying an out-of-hours rule) that goes unacknowledged. Citing SOP Section 7 in rules_applied but not flagging the resulting draft deviation from the must-include spec as a judgement call is a gap. The reasoning is directionally right but overconfident where ambiguity existed.",
+        "overall_verdict": "The draft is largely strong — correct tone, right acknowledgement, no banned content — but it misses the benchmark's must-include requirement that the callback be framed as \"today\" rather than \"Monday morning,\" a substitution the agent made without flagging it as a judgement call. The reasoning is directionally correct but shaky: the agent reported no judgement calls despite a genuine P2-vs-P3 ambiguity and an out-of-hours draft deviation that both warranted explicit acknowledgement."
+      }
+    },
+    {
+      "id": "MSG-018",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 1.0,
+        "strict_match": 1.0
+      },
+      "qualitative": {
+        "draft_must_include": [],
+        "draft_must_not_include": [],
+        "tone": "off",
+        "tone_notes": "Judge response omitted tone assessment.",
+        "reasoning_assessment": "shaky",
+        "reasoning_notes": "Judge response omitted reasoning assessment.",
+        "overall_verdict": "Judge response was incomplete; review the raw case manually."
+      }
+    },
+    {
+      "id": "MSG-019",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 0.0,
+        "route_to": 1.0,
+        "needs_human_review": 1.0,
+        "strict_match": 0.0
+      },
+      "qualitative": {
+        "draft_must_include": [
+          {
+            "item": "acknowledges the missed refund timing",
+            "covered": "yes"
+          },
+          {
+            "item": "confirms Accounts will follow up",
+            "covered": "yes"
+          },
+          {
+            "item": "uses customer first name (Catherine)",
+            "covered": "yes"
+          }
+        ],
+        "draft_must_not_include": [
+          {
+            "item": "blame on the customer",
+            "violated": "no"
+          },
+          {
+            "item": "promise of immediate refund without verification",
+            "violated": "no"
+          }
+        ],
+        "tone": "matches",
+        "tone_notes": "Reads like the competent-neighbour voice the guide calls for. Plain opener, specific reference to the job ref, clear next step with a time window ('first thing tomorrow morning'), no filler phrases, no exclamation marks, correct sign-off. Length is 2 sentences — within the 2–4 sentence target. Minor note: 'get it sorted' is slightly colloquial but consistent with Northwind's plain style.",
+        "reasoning_assessment": "shaky",
+        "reasoning_notes": "The agent correctly identifies the $500 threshold for human review and the Accounts routing, and the out-of-hours timing detail is handled well. However, the priority call is weak: the agent assigns P3 and doesn't engage with the benchmark's observation that a refund delay with financial impact and a follow-up chase is defensible as P2. The benchmark explicitly flags this as a judgement call worth noting, yet the agent logs zero judgement calls — which is the main shaky signal. The category choice (BILLING vs COMPLAINT) also goes unexamined, even though the benchmark notes it as a meaningful distinction. The summary is accurate but thin; it doesn't show the agent weighed the P2/P3 tension or the category ambiguity at all.",
+        "overall_verdict": "The draft reply is solid — it hits all required points, avoids the prohibited ones, and sounds authentically Northwind. The reasoning is where the agent falls short: it confidently reports no judgement calls despite two genuine ambiguities (P2 vs P3 priority and BILLING vs COMPLAINT category) that the benchmark explicitly flags as worth examining. That's a shaky reasoning output, not a sound one."
+      }
+    },
+    {
+      "id": "MSG-020",
+      "deterministic": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route_to": 1.0,
+        "needs_human_review": 1.0,
+        "strict_match": 1.0
+      },
+      "qualitative": {
+        "draft_must_include": [
+          {
+            "item": "confirms quote will follow with site visit",
+            "covered": "yes"
+          },
+          {
+            "item": "acknowledges the brick-wall flag",
+            "covered": "yes"
+          },
+          {
+            "item": "uses customer first name (Nathan)",
+            "covered": "yes"
+          }
+        ],
+        "draft_must_not_include": [
+          {
+            "item": "fixed price (split-system installation is 'from $1,600', not fixed)",
+            "violated": "yes"
+          },
+          {
+            "item": "exclamation marks",
+            "violated": "no"
+          }
+        ],
+        "tone": "drifts",
+        "tone_notes": "The opening and sign-off are correctly Northwind-style, and the reply is within the 2–4 sentence limit. However, quoting 'from $1,600' violates the hard tone/style rule: 'Never quote a price unless the catalogue lists it as fixed.' A 'from' price is not a fixed price. The rest of the draft sounds like a competent neighbour — no banned phrases, no over-apologising, no generic opener — so the drift is specifically from this one hard rule breach rather than a general voice failure.",
+        "reasoning_assessment": "shaky",
+        "reasoning_notes": "The agent cited the tone guide rule about referencing the 'from' price, but the tone guide's hard rule is the opposite: never quote a price unless it is fixed. The agent appears to have misread or misapplied the rule, treating the catalogue's 'from $1,600' as permission to quote it in the reply, when it is actually a reason not to. Additionally, the benchmark notes flag that agents flagging the brick-wall complication as a threshold concern are being too cautious — the agent's summary correctly avoids over-escalating, but it also doesn't surface the tension between 'from' pricing and the no-price-quoting hard rule as a judgement call. Reporting zero judgement calls on a case where the price-quoting rule required active interpretation is a gap. The reasoning is not bluffing outright, but it misweighs a key rule.",
+        "overall_verdict": "The draft covers all three must-include items and avoids exclamation marks, but it violates the hard rule against quoting non-fixed prices by including 'from $1,600' — the catalogue lists this as a 'from' price, not a fixed one, so it should not appear in the reply. The reasoning misapplies the tone guide on this exact point and fails to flag it as a judgement call, making it shaky rather than sound."
+      }
+    }
+  ]
+}

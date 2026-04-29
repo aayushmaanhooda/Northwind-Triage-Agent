@@ -1,0 +1,1037 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Northwind Triage Agent, Take-Home Submission</title>
+<style>
+  :root {
+    --bg: #f6f3ec;
+    --paper: #fbfaf5;
+    --ink: #1c1a17;
+    --ink-soft: #3a3631;
+    --muted: #7a736a;
+    --rule: #d9d3c5;
+    --rule-soft: #e8e3d6;
+    --accent: #8a3a1f;
+    --accent-soft: #b35a35;
+    --code-bg: #ece7d8;
+    --code-fg: #2a2620;
+    --quote-bar: #c7bfae;
+    --serif: "Iowan Old Style", "Palatino Linotype", "Palatino", "Book Antiqua", Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "kern", "liga", "onum";
+  }
+
+  /* ────────────── Page chrome ────────────── */
+
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 56px 48px 96px;
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 64px;
+  }
+
+  /* ────────────── Sidebar ────────────── */
+
+  .sidebar {
+    position: sticky;
+    top: 56px;
+    align-self: start;
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+  }
+
+  .sidebar .brand {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sidebar .brand::before {
+    content: "";
+    width: 18px;
+    height: 1px;
+    background: var(--accent);
+    display: inline-block;
+  }
+
+  .toc-label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 14px;
+    font-weight: 600;
+  }
+
+  .toc {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .toc li {
+    margin: 0;
+    padding: 0;
+  }
+
+  .toc a {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 10px;
+    padding: 7px 0;
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-top: 1px solid var(--rule-soft);
+    transition: color 120ms ease;
+  }
+
+  .toc li:last-child a { border-bottom: 1px solid var(--rule-soft); }
+
+  .toc a:hover { color: var(--accent); }
+
+  .toc a.active {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .toc a .num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  .toc a.active .num { color: var(--accent); }
+
+  .meta-box {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule-soft);
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .meta-box dt {
+    font-weight: 600;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 10px;
+    margin-top: 10px;
+  }
+
+  .meta-box dt:first-child { margin-top: 0; }
+
+  .meta-box dd {
+    margin: 2px 0 0;
+  }
+
+  /* ────────────── Article ────────────── */
+
+  article {
+    max-width: 680px;
+    min-width: 0;
+  }
+
+  .masthead {
+    margin-bottom: 64px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-size: 52px;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    font-weight: 600;
+    margin: 0 0 18px;
+    color: var(--ink);
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .deck {
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin: 0;
+    font-style: italic;
+    max-width: 560px;
+  }
+
+  .byline {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    margin-top: 28px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .byline span strong {
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+
+  /* ────────────── Section headers ────────────── */
+
+  section {
+    margin-top: 72px;
+    scroll-margin-top: 32px;
+  }
+
+  section:first-of-type { margin-top: 0; }
+
+  .section-head {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 18px;
+    align-items: baseline;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .section-num {
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding-top: 10px;
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  /* ────────────── Body copy ────────────── */
+
+  p, ul, ol {
+    margin: 0 0 18px;
+    text-wrap: pretty;
+  }
+
+  section .lead {
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  section > p:first-of-type::first-letter,
+  .drop-cap::first-letter {
+    font-family: var(--serif);
+    font-size: 56px;
+    float: left;
+    line-height: 0.9;
+    padding: 6px 8px 0 0;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  /* don't drop-cap inside cases or short paragraphs */
+  .case > p:first-of-type::first-letter,
+  .no-cap::first-letter {
+    font-size: inherit;
+    float: none;
+    padding: 0;
+    color: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+  }
+
+  ul {
+    padding-left: 22px;
+  }
+
+  li {
+    margin-bottom: 8px;
+    text-wrap: pretty;
+  }
+
+  li::marker { color: var(--muted); }
+
+  strong { font-weight: 600; color: var(--ink); }
+
+  em { font-style: italic; }
+
+  /* ────────────── Code & quotes ────────────── */
+
+  code, .mono {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    font-feature-settings: "kern", "liga";
+  }
+
+  :not(pre) > code {
+    background: var(--code-bg);
+    color: var(--code-fg);
+    padding: 1px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+    font-variant-ligatures: none;
+  }
+
+  pre {
+    background: var(--paper);
+    color: var(--ink-soft);
+    padding: 22px 24px;
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: 2px;
+    overflow-x: auto;
+    font-size: 12.5px;
+    line-height: 1.6;
+    margin: 24px 0 28px;
+    font-family: var(--mono);
+  }
+
+  pre code {
+    background: transparent;
+    padding: 0;
+    white-space: pre;
+    font-size: inherit;
+    color: inherit;
+  }
+
+  blockquote {
+    margin: 22px 0 26px;
+    padding: 6px 0 6px 24px;
+    border-left: 2px solid var(--quote-bar);
+    color: var(--ink-soft);
+    font-style: italic;
+    font-size: 17px;
+  }
+
+  blockquote p {
+    margin: 0;
+  }
+
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  blockquote cite::before {
+    content: ", ";
+  }
+
+  /* ────────────── Stats line ────────────── */
+
+  .headline-stat {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    padding: 24px 0;
+    border-top: 1px solid var(--rule-soft);
+    border-bottom: 1px solid var(--rule-soft);
+    margin: 8px 0 28px;
+  }
+
+  .headline-stat .big {
+    font-family: var(--serif);
+    font-size: 64px;
+    line-height: 1;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    font-feature-settings: "lnum";
+  }
+
+  .headline-stat .label {
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--ink-soft);
+    max-width: 280px;
+  }
+
+  .headline-stat .label strong {
+    display: block;
+    font-size: 14px;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  /* per-field grid */
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--rule-soft);
+    border: 1px solid var(--rule-soft);
+    margin: 16px 0 28px;
+  }
+
+  .field-cell {
+    background: var(--paper);
+    padding: 18px 20px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .field-cell .name {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+
+  .field-cell .value {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    font-feature-settings: "lnum", "tnum";
+  }
+
+  .field-cell .value.muted { color: var(--muted); }
+
+  .field-note {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: -16px;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  /* ────────────── Cases ────────────── */
+
+  .case {
+    margin: 32px 0;
+    padding: 0;
+    position: relative;
+  }
+
+  .case + .case {
+    padding-top: 32px;
+    border-top: 1px dashed var(--rule);
+  }
+
+  .case h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.3;
+    font-weight: 600;
+    margin: 0 0 4px;
+    color: var(--ink);
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+
+  .case h3 .case-tag {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    border: 1px solid var(--accent);
+    padding: 3px 7px 2px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    position: relative;
+    top: -2px;
+  }
+
+  .case h3 .case-tag.fail {
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+
+  .case .msg-id {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    letter-spacing: 0.04em;
+  }
+
+  .verdict-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--rule-soft);
+    border: 1px solid var(--rule-soft);
+    margin: 14px 0 18px;
+    font-family: var(--sans);
+  }
+
+  .verdict-cell {
+    background: var(--paper);
+    padding: 12px 16px;
+  }
+
+  .verdict-cell .who {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .verdict-cell .what {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink);
+  }
+
+  .case p {
+    margin: 8px 0 12px;
+  }
+
+  .label-inline {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-right: 6px;
+  }
+
+  /* ────────────── Pull-pattern callout ────────────── */
+
+  .pattern {
+    margin: 28px 0 8px;
+    padding: 20px 24px;
+    background: var(--paper);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 2px 2px 0;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .pattern strong {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .end-mark {
+    text-align: center;
+    margin-top: 72px;
+    color: var(--rule);
+    font-family: var(--mono);
+    font-size: 14px;
+    letter-spacing: 0.4em;
+  }
+
+  /* ────────────── Print ────────────── */
+
+  @media print {
+    body { background: white; font-size: 11pt; }
+    .page { display: block; padding: 16mm; max-width: none; }
+    .sidebar { display: none; }
+    article { max-width: none; }
+    h1 { font-size: 32pt; }
+    h2 { font-size: 18pt; }
+    .section-head { page-break-after: avoid; }
+    h2, h3 { page-break-after: avoid; }
+    pre, blockquote, .case, .pattern, .headline-stat, .verdict-grid, .field-grid { page-break-inside: avoid; }
+    a { color: inherit; text-decoration: none; }
+    section > p:first-of-type::first-letter { color: var(--ink); }
+    .end-mark { color: var(--muted); }
+  }
+
+  /* ────────────── Responsive ────────────── */
+
+  @media (max-width: 960px) {
+    .page {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding: 40px 28px 64px;
+    }
+    .sidebar {
+      position: static;
+      max-height: none;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 24px;
+    }
+    h1 { font-size: 40px; }
+  }
+
+  @media (max-width: 560px) {
+    body { font-size: 16px; }
+    .page { padding: 32px 20px 48px; }
+    h1 { font-size: 32px; }
+    h2 { font-size: 22px; }
+    .section-head { grid-template-columns: 36px 1fr; gap: 10px; }
+    .headline-stat { flex-direction: column; gap: 8px; align-items: flex-start; }
+    .headline-stat .big { font-size: 48px; }
+    .field-grid, .verdict-grid { grid-template-columns: 1fr; }
+    .case h3 { flex-direction: column; gap: 6px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ─────────── Sidebar ─────────── -->
+  <aside class="sidebar">
+    <div class="brand">Take-Home</div>
+    <div class="toc-label">Contents</div>
+    <ul class="toc">
+      <li><a href="#design"><span class="num">01</span><span>Agent Design</span></a></li>
+      <li><a href="#prompts"><span class="num">02</span><span>Final Prompts</span></a></li>
+      <li><a href="#accuracy"><span class="num">03</span><span>Headline Accuracy</span></a></li>
+      <li><a href="#disagree"><span class="num">04</span><span>Disagreements</span></a></li>
+      <li><a href="#failures"><span class="num">05</span><span>Failures</span></a></li>
+      <li><a href="#tone"><span class="num">06</span><span>Tone</span></a></li>
+      <li><a href="#contradictions"><span class="num">07</span><span>Source Contradictions</span></a></li>
+      <li><a href="#next"><span class="num">08</span><span>What I'd Build Next</span></a></li>
+    </ul>
+
+    <dl class="meta-box">
+      <dt>Project</dt>
+      <dd>Northwind Triage Agent</dd>
+      <dt>Model</dt>
+      <dd>claude-sonnet-4-5</dd>
+      <dt>Stack</dt>
+      <dd>LangChain · Pydantic · FastAPI</dd>
+      <dt>Strict accuracy</dt>
+      <dd>14 / 20 · 70%</dd>
+    </dl>
+  </aside>
+
+  <!-- ─────────── Article ─────────── -->
+  <article>
+
+    <header class="masthead">
+      <div class="eyebrow">Take-Home Submission</div>
+      <h1>Northwind <em>Triage</em> Agent</h1>
+      <p class="deck">A single-shot structured-output classifier for a residential trades business, and an honest accounting of where it works, where it drifts, and where the SOP itself runs out.</p>
+      <div class="byline">
+        <span><strong>Format</strong> &nbsp;Design notes</span>
+        <span><strong>Reading time</strong> &nbsp;≈ 12 min</span>
+        <span><strong>Sample</strong> &nbsp;20 messages</span>
+      </div>
+    </header>
+
+    <!-- ─────────── 01 Design ─────────── -->
+    <section id="design">
+      <div class="section-head">
+        <div class="section-num">Section 01</div>
+        <h2>Agent Design</h2>
+      </div>
+
+      <p class="lead">A <strong>single LangChain chain</strong> wrapping Claude Sonnet 4.5 with structured output bound to a Pydantic schema. One message in, one <code>TriageDecision</code> out. No graph, no multi-agent orchestration, no retrieval.</p>
+
+      <p class="no-cap">The reference documents (SOP, catalogue, tone guide) are embedded verbatim in the system prompt, they total ~3k tokens, so retrieval would be ceremony. The schema includes a structured <code>Reasoning</code> sub-model with three fields (<code>rules_applied</code>, <code>judgement_calls</code>, <code>summary</code>) that explicitly separates rule-application from judgement, mirroring the rubric's interest in clear separation between rule-following and judgement. A separate LLM-as-judge evaluator runs on the same 20 messages for the qualitative checks the rubric requires.</p>
+
+      <p class="no-cap">Out-of-hours detection is computed in Python from <code>received_at</code> and injected into the model's input, LLMs are unreliable at parsing ISO timestamps into day-of-week, so this is deterministic rather than left to model reasoning.</p>
+
+      <p class="no-cap">I considered LangGraph, Deep Agents, and a multi-call pipeline (classify → priority → route → draft) and rejected all of them: the sub-decisions are tightly coupled, and splitting them across nodes would either duplicate context across many calls or lose information between steps. A single well-prompted call wins on this scale.</p>
+
+      <p class="no-cap">The decision contract is enforced as a Pydantic schema (<code>src/schemas.py</code>): a <code>category</code> enum (<code>BOOKING | QUOTE | COMPLAINT | EMERGENCY | BILLING | OUT_OF_SCOPE</code>), a <code>priority</code> enum (<code>P1 | P2 | P3</code>), a <code>route_to</code> list of teams, a <code>draft_reply</code>, a <code>needs_human_review</code> flag, and a nested <code>reasoning</code> object that splits the agent's logic into <code>rules_applied</code> (deterministic SOP/catalogue lookups), <code>judgement_calls</code> (places where rules ran out and the agent had to interpret), and a plain-English <code>summary</code>. The model is invoked via LangChain's <code>ChatAnthropic.with_structured_output(TriageDecision, include_raw=True)</code>, so the schema is enforced at the tool-call layer rather than reconstructed from free-form text.</p>
+
+      <p class="no-cap">The shape is deliberately not agentic. The task is bounded, a fixed reference corpus plus a closed enum decision space, so giving the model tools or memory would add latency and failure modes without unlocking new behaviour. Instead the entire reference corpus is injected into the system prompt once, and a numbered decision procedure walks the model through the same steps a human triager would follow. Splitting reasoning into <code>rules_applied</code> vs. <code>judgement_calls</code> is the load-bearing design choice: it lets a human reviewer tell at a glance whether a decision came from a rule or from interpretation, which is exactly the information needed to decide whether to trust the output or override it.</p>
+    </section>
+
+    <!-- ─────────── 02 Prompts ─────────── -->
+    <section id="prompts">
+      <div class="section-head">
+        <div class="section-num">Section 02</div>
+        <h2>Final Prompts</h2>
+      </div>
+
+      <p class="lead">Two prompts in <code>src/prompts.py</code>. Both are f-strings that inline the markdown reference docs from <code>data/reference/</code> at module import.</p>
+
+      <ul class="no-cap">
+        <li><strong><code>SYSTEM_PROMPT</code></strong>, the triage agent. Embeds SOP, catalogue, and tone guide verbatim, adds a role frame, an 8-step decision procedure, and the distinction between <code>judgement_calls</code> (descriptive, where I interpreted) and <code>needs_human_review</code> (routing, driven by SOP §6 triggers).</li>
+        <li><strong><code>JUDGE_SYSTEM_PROMPT</code></strong>, the LLM-as-judge for qualitative scoring. Embeds the tone guide; instructs the judge to assess must-include / must-not-include items semantically (not by string match), to score tone against the guide, and to assess reasoning quality.</li>
+      </ul>
+
+      <h3 style="font-family:var(--serif);font-size:18px;font-weight:600;margin:32px 0 6px;color:var(--ink);">Agent system prompt, <code>SYSTEM_PROMPT</code></h3>
+      <p class="no-cap" style="font-size:15px;color:var(--ink-soft);">Used by <code>triage()</code> in <code>src/agent.py</code>. Establishes the agent's role, embeds the three reference documents as the source of truth, and prescribes an explicit decision procedure plus reasoning conventions.</p>
+
+<pre><code># Role
+You are the first-pass triage agent for Northwind Home Services, a residential
+trades business in Sydney. You receive customer messages from email, SMS, and
+webform, and produce a structured triage decision that a human dispatcher
+reviews before action.
+
+The three documents below are your source of truth. Do not invent rules that
+are not in them.
+
+---
+# Standard Operating Procedure
+{SOP}                    # injected from data/reference/sop.md
+
+---
+# Service Catalogue
+{CATALOGUE}              # injected from data/reference/catalogue.md
+
+---
+# Tone &amp; Style Guide
+{TONE_GUIDE}             # injected from data/reference/tone_guide.md
+
+---
+# Decision Procedure
+Walk through these steps in order for every message:
+
+1. Read the message fully. Note: sender, channel, time of day, what they're
+   asking for, whether they are upset, whether the language is English, whether
+   the content is coherent.
+2. Check OUT_OF_SCOPE first. If the request matches anything in the catalogue's
+   "Things we do not do" section, classify as OUT_OF_SCOPE.
+3. Classify the category per SOP Section 2. Check in this order:
+   EMERGENCY → COMPLAINT → BILLING → QUOTE → BOOKING. If torn between QUOTE
+   and BOOKING, default to QUOTE.
+4. Set the priority per SOP Section 3. EMERGENCY is always P1. Apply special
+   rules from SOP Section 4 (e.g. HVAC has no on-call → after-hours HVAC is P2).
+5. Route per SOP Section 4. Output is a list of teams. Single team in most
+   cases; multiple teams only when SOP Section 4's special-case rules
+   explicitly require it. Look up the specific cases there rather than guessing.
+6. Decide needs_human_review per SOP Section 6. Use catalogue prices to
+   estimate whether quote thresholds are crossed.
+7. Draft the reply per the tone guide. Match the customer's situation
+   (upset / emergency / out-of-scope / non-English / garbled).
+8. Populate reasoning as described below.
+
+---
+# How to Reason
+- rules_applied — always populate. Cite specific rules with their source.
+  If you cannot cite a rule, you are guessing.
+- judgement_calls — populate ONLY when rules conflict, are ambiguous, don't
+  cover the case, or multiple defensible answers exist. Otherwise leave [].
+  Do not invent ambiguity.
+- summary — always populate. 1–3 sentences in plain English.
+
+---
+# needs_human_review vs judgement_calls
+These are independent. needs_human_review is routing (driven by SOP §6's
+explicit list). judgement_calls is descriptive (driven by rules running out).
+A case can be flagged without judgement (non-English: SOP says flag, no
+interpretation needed). A case can require judgement without being flagged.</code></pre>
+
+      <h3 style="font-family:var(--serif);font-size:18px;font-weight:600;margin:32px 0 6px;color:var(--ink);">LLM-as-judge prompt, <code>JUDGE_SYSTEM_PROMPT</code></h3>
+      <p class="no-cap" style="font-size:15px;color:var(--ink-soft);">Used by <code>judge()</code> in <code>src/evaluator.py</code> to score the qualitative dimensions (draft reply quality, reasoning quality) that can't be checked with <code>==</code>. Outputs a <code>JudgeVerdict</code>.</p>
+
+<pre><code># Role
+You are a qualitative evaluator for a customer-service triage agent at
+Northwind Home Services. The agent has classified an inbound customer message
+and produced a draft reply plus reasoning. Your job is to assess two things
+the rubric flags as qualitative:
+
+1. Draft reply quality — does it hit the points the benchmark says it must
+   include, avoid the points it must not include, and sound like the Northwind
+   tone guide rather than a generic LLM voice?
+2. Reasoning quality — does the agent's reasoning weigh the right rules, or
+   is it bluffing past ambiguity?
+
+You are NOT scoring the four hard fields (category, priority, route_to,
+needs_human_review). Those are scored deterministically elsewhere.
+
+---
+# How to Judge Draft Reply Quality
+- For each must_include item: judge whether the draft semantically covers it.
+  Look at meaning, not strings.
+- For each must_not_include item: judge whether the draft violates it.
+- Tone: Northwind sounds like a competent neighbour, not a call centre.
+  Common failure modes: generic openers, over-apologising, "rest assured",
+  exclamation marks, promising specific times, quoting "from $X" prices,
+  naming a tradesperson, replies longer than 2–4 sentences.
+
+---
+# How to Judge Reasoning Quality
+- Did the agent cite the right rules for the case (the ones that actually
+  drive the decision, not just any rules)?
+- Did the agent correctly identify ambiguity? If the benchmark notes flag
+  the case as ambiguous, did the agent surface it in judgement_calls — or
+  did it confidently bluff past it?
+- Did the agent invent ambiguity where none existed?
+- Is the summary accurate and grounded, or hand-wavy?
+
+---
+# Output Style
+Produce a structured JudgeVerdict:
+- per-item flags on must_include / must_not_include
+- tone: "matches" | "drifts" | "off"
+- reasoning_assessment: "sound" | "shaky" | "bluffing"
+- short evidence quotes when flagging issues
+- 1–2 sentence overall_verdict
+
+Always populate every field. Do not be lenient — the point is to find drift
+and weak spots, not to validate the agent.
+
+---
+# Tone &amp; Style Guide (Reference)
+{TONE_GUIDE}             # same tone guide given to the agent</code></pre>
+    </section>
+
+    <!-- ─────────── 03 Accuracy ─────────── -->
+    <section id="accuracy">
+      <div class="section-head">
+        <div class="section-num">Section 03</div>
+        <h2>Headline Accuracy</h2>
+      </div>
+
+      <div class="headline-stat">
+        <div class="big">70%</div>
+        <div class="label">
+          <strong>Strict accuracy across all four hard fields</strong>
+          14 of 20 messages matched on <code>category</code>, <code>priority</code>, <code>route_to</code>, and <code>needs_human_review</code> simultaneously.
+        </div>
+      </div>
+
+      <p class="no-cap"><strong>Per-field accuracy.</strong></p>
+
+      <div class="field-grid">
+        <div class="field-cell"><span class="name">category</span><span class="value">95%</span></div>
+        <div class="field-cell"><span class="name">priority</span><span class="value">95%</span></div>
+        <div class="field-cell"><span class="name">route_to</span><span class="value">98%</span></div>
+        <div class="field-cell"><span class="name">needs_human_review</span><span class="value muted">85%</span></div>
+      </div>
+
+      
+
+      <p class="no-cap">The agent is strongest on category and routing, weakest on flagging for human review. Most strict failures came from <code>needs_human_review</code> calls where the SOP rules ran out and judgement was required.</p>
+    </section>
+
+    <!-- ─────────── 04 Disagreements ─────────── -->
+    <section id="disagree">
+      <div class="section-head">
+        <div class="section-num">Section 04</div>
+        <h2>Three Cases Where I Disagree With the Benchmark</h2>
+      </div>
+
+      <p class="lead">Three results scored as misses where I think the agent was right and the benchmark is reaching beyond what the SOP actually says.</p>
+
+      <div class="case no-cap">
+        <h3><span class="case-tag">Case 1</span> Dishwasher repair</h3>
+        <div class="msg-id">MSG-007 · BOOKING</div>
+        <div class="verdict-grid">
+          <div class="verdict-cell"><div class="who">Benchmark</div><div class="what">needs_human_review: <strong>true</strong></div></div>
+          <div class="verdict-cell"><div class="who">Agent</div><div class="what">needs_human_review: <strong>false</strong></div></div>
+        </div>
+        <p>Catalogue is explicit ("we install but do not repair appliances"). None of SOP §6's flag triggers apply. Benchmark flags on a soft "human might add value" basis the SOP doesn't encode. Agent's strict reading is correct.</p>
+      </div>
+
+      <div class="case no-cap">
+        <h3><span class="case-tag">Case 2</span> Bathroom reno plumbing</h3>
+        <div class="msg-id">MSG-008 · QUOTE</div>
+        <div class="verdict-grid">
+          <div class="verdict-cell"><div class="who">Benchmark</div><div class="what">needs_human_review: <strong>true</strong></div></div>
+          <div class="verdict-cell"><div class="who">Agent</div><div class="what">needs_human_review: <strong>false</strong></div></div>
+        </div>
+        <p>Catalogue lists this at "from $4,500", under SOP §6's $5,000 flag threshold. Benchmark flags based on speculation that the actual quote <em>might</em> exceed $5k.</p>
+        <blockquote><p>"defensible to leave false if you read it strictly."</p><cite>benchmark notes</cite></blockquote>
+      </div>
+
+      <div class="case no-cap">
+        <h3><span class="case-tag">Case 3</span> Catherine's refund follow-up</h3>
+        <div class="msg-id">MSG-019 · BILLING</div>
+        <div class="verdict-grid">
+          <div class="verdict-cell"><div class="who">Benchmark</div><div class="what">priority: <strong>P2</strong></div></div>
+          <div class="verdict-cell"><div class="who">Agent</div><div class="what">priority: <strong>P3</strong></div></div>
+        </div>
+        <p>Customer is polite, no anger, no threats. SOP §3 defines P2 as essential function loss or complaint over $1,000, neither applies here. Benchmark went P2 on "financial impact" reasoning that's not in the SOP.</p>
+        <blockquote><p>"defensible as P3."</p><cite>benchmark notes</cite></blockquote>
+      </div>
+
+      <div class="pattern">
+        <strong>Pattern</strong>
+        All three are cases where the SOP itself is under-specified and the benchmark fills the gaps with practical judgement an automated agent reasonably wouldn't replicate. These are SOP gaps, not agent failures, and worth flagging back to Northwind as places the SOP needs tightening.
+      </div>
+    </section>
+
+    <!-- ─────────── 05 Failures ─────────── -->
+    <section id="failures">
+      <div class="section-head">
+        <div class="section-num">Section 05</div>
+        <h2>Three Cases Where the Agent Failed</h2>
+      </div>
+
+      <p class="lead">Three losses I'll own, at least two of them.</p>
+
+      <div class="case no-cap">
+        <h3><span class="case-tag fail">Failure 1</span> Olivia's combined quote</h3>
+        <div class="msg-id">MSG-016 · QUOTE</div>
+        <p><span class="label-inline">What went wrong.</span> Catalogue lists ducted aircon at "from $9,500", over the $5,000 threshold. Agent should have flagged. Also promised a single combined site visit when the catalogue requires separate assessment for ducted aircon.</p>
+        <p><span class="label-inline">Why.</span> Two reasons. First, prompt issue, my prompt doesn't explicitly tell the agent to compare catalogue "from" prices against the $5k threshold or surface conflicts when one customer request spans multiple services. Second, LLMs are weak at numerical comparison, even "$9,500 &gt; $5,000" can fail under load. A simple deterministic maths tool (<code>compare_to_threshold(price, threshold)</code>) would make this exact and auditable.</p>
+      </div>
+
+      <div class="case no-cap">
+        <h3><span class="case-tag fail">Failure 2</span> Garbled "asdf asdf test test"</h3>
+        <div class="msg-id">MSG-013 · OUT_OF_SCOPE</div>
+        <p>Benchmark says agent should flag and skip drafting; my agent produced a polished placeholder reply.</p>
+        <p><span class="label-inline">Why per benchmark.</span> Schema forces <code>draft_reply: str</code>, so the agent can't return "no draft."</p>
+        <p><span class="label-inline">My push-back.</span> I'd argue this isn't a real failure. The agent's reply ("we couldn't make out what you need, send more detail") is honest, brief, and gives a real user a path forward in case it was an accidental submission. We didn't pretend to understand. By the benchmark's strict letter it's a fail; by sensible operations it's fine.</p>
+      </div>
+
+      <div class="case no-cap">
+        <h3><span class="case-tag fail">Failure 3</span> Out-of-hours rules ignored</h3>
+        <div class="msg-id">Multiple messages · timestamp-driven</div>
+        <p><span class="label-inline">What went wrong.</span> Agent promised same-day responses on messages received after hours or on weekends, despite SOP §7 saying P2/P3 should queue for next business morning.</p>
+        <p><span class="label-inline">Why.</span> Agent doesn't know current date/day/time. LLMs are unreliable at parsing ISO timestamps into day-of-week.</p>
+        <p><span class="label-inline">Fix.</span> Added Python-side parsing in <code>_format_message</code> to inject "Saturday 22:30, Out-of-hours: YES" directly. Deterministic, no model guessing.</p>
+      </div>
+    </section>
+
+    <!-- ─────────── 06 Tone ─────────── -->
+    <section id="tone">
+      <div class="section-head">
+        <div class="section-num">Section 06</div>
+        <h2>Tone</h2>
+      </div>
+
+      <p>The agent's draft voice was mostly consistent with the tone guide, plain language, customer first names, no generic openers, no exclamation marks, correct sign-off on the majority of messages. Where it drifted was on the harder cases: complaints, ambiguous scope, garbled input. On those it reached for corporate-safe phrasing, performative apologies, hedging words like "definitely", specific times instead of windows, the opposite of what the tone guide wants.</p>
+
+      <blockquote><p>"honest, not performative"</p><cite>tone guide</cite></blockquote>
+
+      <p class="no-cap">The pattern suggests the agent does well on cases that mirror the tone guide's own examples and drifts where the guide doesn't directly demonstrate the voice.</p>
+    </section>
+
+    <!-- ─────────── 07 Contradictions ─────────── -->
+    <section id="contradictions">
+      <div class="section-head">
+        <div class="section-num">Section 07</div>
+        <h2>SOP / Catalogue / Tone Guide Contradictions</h2>
+      </div>
+
+      <p class="lead">A few places where the source documents don't fully agree, worth surfacing back to Northwind.</p>
+
+      <ul class="no-cap">
+        <li><strong>SOP §6 says flag quotes "over $5,000"</strong>, but the catalogue lists bathroom reno plumbing at "from $4,500", common bathroom renos exceed $5k in practice, creating ambiguity over whether to flag based on the catalogue floor or the likely actual amount. The benchmark and SOP take different sides on this.</li>
+        <li><strong>SOP §3 lists P2 thresholds as "complaints involving a charge over $1,000"</strong>, but the tone guide instructs you to acknowledge upset customers directly regardless of priority. This creates tension on cases like MSG-017 (conduct complaint, $280 job), the SOP says P3 by amount, but the upset-customer signal pushes toward P2.</li>
+        <li><strong>SOP §2 names "no hot water in winter" as P1 EMERGENCY</strong>, but says nothing about analogous heating failures. SOP §4 then explicitly says HVAC has no on-call. Together they imply heater-not-working is P2, but it requires reading two sections in conjunction, which trips both human and agent triagers.</li>
+      </ul>
+    </section>
+
+    <!-- ─────────── 08 Next ─────────── -->
+    <section id="next">
+      <div class="section-head">
+        <div class="section-num">Section 08</div>
+        <h2>What I'd Build Next</h2>
+      </div>
+
+      <p>Close the loop by sending the agent's drafts to customers and capturing what comes back.</p>
+
+      <p class="no-cap">Right now the agent produces drafts that go nowhere, there's no signal on whether they actually work in the wild. I'd wire up a FastAPI endpoint that sends approved drafts via email (Resend or similar), then track two things per message: did the customer reply, and if they did, was the reply something the agent could handle next or did it need a human to take over. That gives real production data on which drafts land and which don't, far more useful than the 20-message benchmark for finding what the agent actually gets wrong.</p>
+    </section>
+
+    <div class="end-mark">· · ·</div>
+
+  </article>
+</div>
+
+<script>
+  // Active-section tracking in the sidebar TOC
+  (function () {
+    const links = Array.from(document.querySelectorAll('.toc a'));
+    const map = new Map();
+    links.forEach(a => {
+      const id = a.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if (target) map.set(target, a);
+    });
+
+    const obs = new IntersectionObserver((entries) => {
+      // pick the entry closest to top that is intersecting
+      let best = null;
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          if (!best || e.boundingClientRect.top < best.boundingClientRect.top) {
+            best = e;
+          }
+        }
+      });
+      if (best) {
+        links.forEach(a => a.classList.remove('active'));
+        const link = map.get(best.target);
+        if (link) link.classList.add('active');
+      }
+    }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+
+    map.forEach((_, target) => obs.observe(target));
+
+    // Smooth scroll
+    links.forEach(a => {
+      a.addEventListener('click', (e) => {
+        const id = a.getAttribute('href').slice(1);
+        const t = document.getElementById(id);
+        if (t) {
+          e.preventDefault();
+          const top = t.getBoundingClientRect().top + window.scrollY - 24;
+          window.scrollTo({ top, behavior: 'smooth' });
+          history.replaceState(null, '', '#' + id);
+        }
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
