@@ -59,6 +59,15 @@ python -m scripts.run_evaluator
 
 ---
 
+## Outputs
+
+The `outputs/` folder contains the results from the latest full run on all 20 messages:
+
+- `outputs/agent_result.json`: agent decisions for all 20 messages.
+- `outputs/evaluation_report.json`: evaluator results and scores for all 20 messages.
+
+---
+
 ## Approximate Runtime
 
 - Single agent run on one message: 15-20 seconds.
